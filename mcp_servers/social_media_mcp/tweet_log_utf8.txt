@@ -1,0 +1,21 @@
+﻿[dotenv@17.3.1] injecting env (13) from ..\..\.env -- tip: ΓÜÖ∩╕Å  load multiple .env files with { path: ['.env.local', '.env'] }
+Posting to Twitter using v1.1...
+node : Error posting to 
+Twitter: { errors: [ { 
+code: 89, message: 
+'Invalid or expired 
+token.' } ] }
+At line:1 char:1
++ node post_tweet.js 2>&1 
+| Out-File -Encoding utf8 
+tweet_log_utf8.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (E  
+  rror posting t...d to   
+ ken.' } ] }:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 

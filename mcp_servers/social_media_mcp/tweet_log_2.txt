@@ -1,0 +1,28 @@
+﻿[dotenv@17.3.1] injecting env (13) from ..\..\.env -- tip: ≡ƒ¢á∩╕Å  run anywhere with `dotenvx run -- yourcommand`
+Posting to Twitter using v2...
+node : Error posting 
+to Twitter: {
+At line:1 char:1
++ node post_tweet.js 
+2>&1 | Out-File 
+-Encoding utf8 
+tweet_log_2.txt
++ ~~~~~~~~~~~~~~~~~~~~
+~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (Error post   
+ ing to Twitter: {    
+:String) [], Remo    
+teException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+  title: 
+'Unauthorized',
+  type: 'about:blank',
+  status: 401,
+  detail: 
+'Unauthorized'
+}

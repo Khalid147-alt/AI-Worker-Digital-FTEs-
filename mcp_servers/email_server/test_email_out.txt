@@ -1,0 +1,12 @@
+﻿[dotenv@17.3.1] injecting env (13) from ..\..\.env -- tip: ΓÜÖ∩╕Å  override existing env vars with { override: true }
+Testing OAuth2 setup with:
+Client ID: Set
+Client Secret: Set
+Refresh Token: Missing
+No Refresh Token provided. Generating auth URL for user to log in:
+
+=================================
+ACTION REQUIRED: GO TO THIS URL
+https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fmail.google.com%2F&response_type=code&client_id=14268314293-kj8g6fq5u1v9idarbaktjov3l6m8dtam.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground
+=================================
+

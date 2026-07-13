@@ -1,0 +1,10 @@
+# AI Employee Crontab
+
+# Monday Morning Briefing
+0 8 * * 1 python D:/Hackathon0/scripts/ceo_briefing_generator.py
+
+# Friday Mini-Briefing (Preview)
+0 17 * * 5 python D:/Hackathon0/scripts/ceo_briefing_generator.py --mini
+
+# Daily Cleanup (Example)
+0 0 * * * python D:/Hackathon0/scripts/cleanup_temp.py

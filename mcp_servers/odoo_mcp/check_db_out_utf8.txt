@@ -1,0 +1,47 @@
+﻿Fetching database list from https://neuros.odoo.com/jsonrpc...
+Response: {
+  jsonrpc: '2.0',
+  id: 1,
+  error: {
+    code: 0,
+    message: 'Odoo Server Error',
+    data: {
+      name: 'builtins.KeyError',
+      message: 'db',
+      arguments: [Array],
+      context: {},
+      debug: 'Traceback (most recent call last):\n' +
+        '  File "/home/odoo/src/odoo/saas-19.1/odoo/http.py", line 2514, in _serve_db\n' +
+        '    return retrying(serve_func, env=self.env)\n' +
+        '           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n' +
+        '  File "/home/odoo/src/odoo/saas-19.1/odoo/http.py", line 509, in retrying\n' +
+        '    result = func()\n' +
+        '             ^^^^^^\n' +
+        '  File "/home/odoo/src/odoo/saas-19.1/odoo/http.py", line 2569, in _serve_ir_http\n' +
+        '    response = self.dispatcher.dispatch(rule.endpoint, args)\n' +
+        '               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n' +
+        '  File "/home/odoo/src/odoo/saas-19.1/odoo/http.py", line 2790, in dispatch\n' +
+        "    result = self.request.registry['ir.http']._dispatch(endpoint)\n" +
+        '             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n' +
+        '  File "/home/odoo/src/odoo/saas-19.1/odoo/addons/base/models/ir_http.py", line 357, in _dispatch\n' +
+        '    result = endpoint(**request.params)\n' +
+        '             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n' +
+        '  File "/home/odoo/src/odoo/saas-19.1/odoo/http.py", line 902, in route_wrapper\n' +
+        '    result = endpoint(self, *args, **params_ok)\n' +
+        '             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n' +
+        '  File "/home/odoo/src/custom/trial/saas_trial/controllers/main.py", line 474, in jsonrpc\n' +
+        '    res = super().jsonrpc(service, method, args)\n' +
+        '          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n' +
+        '  File "/home/odoo/src/odoo/saas-19.1/odoo/http.py", line 902, in route_wrapper\n' +
+        '    result = endpoint(self, *args, **params_ok)\n' +
+        '             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n' +
+        '  File "/home/odoo/src/odoo/saas-19.1/addons/rpc/controllers/jsonrpc.py", line 16, in jsonrpc\n' +
+        '    return dispatch_rpc(service, method, args)\n' +
+        '           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n' +
+        '  File "/home/odoo/src/odoo/saas-19.1/odoo/http.py", line 465, in dispatch_rpc\n' +
+        '    dispatch = rpc_dispatchers[service_name]\n' +
+        '               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n' +
+        "KeyError: 'db'\n"
+    }
+  }
+}
