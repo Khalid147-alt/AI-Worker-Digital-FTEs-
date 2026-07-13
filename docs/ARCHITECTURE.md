@@ -1,8 +1,8 @@
-# Gold Tier Architecture: Personal AI Employee
+# Architecture: Personal AI Employee
 
 ## 1. System Overview
 
-The Gold Tier AI Employee is a resilient, event-driven system designed to automate personal business operations. It follows the **Ralph Wiggum Pattern** (Autonomous Loops) and uses **MCP Servers** for external tool access.
+This repository now follows a production-hardening model for an event-driven personal AI operations system. The architecture still uses the Ralph loop pattern and MCP integrations, but the runtime path is now config-driven and the scheduler uses claim-first ownership semantics to avoid the race condition that previously caused double processing.
 
 ```ascii
 +-----------------------+       +-------------------------+
@@ -33,7 +33,7 @@ The Gold Tier AI Employee is a resilient, event-driven system designed to automa
 
 ### A. Watchers & Triggers
 -   **`filesystem_watcher.py`**: Monitors `/Needs_Action` for new task files.
--   **`orchestrator.py`**: The central brain. Runs every 60s to process pending tasks.
+-   **`orchestrator.py`**: The central brain. Uses a claim-first workflow and bounded worker tracking to process tasks safely.
 -   **`watchdog.py`**: Ensures system health and restarts crashed processes.
 -   **`ceo_briefing_generator.py`**: Automated weekly reporting cron job.
 
@@ -52,9 +52,10 @@ Standardized capability definitions for Claude.
 ### D. The Vault (`/AI_Employee_Vault/`)
 The file-based database and UI.
 -   `/Needs_Action`: Incoming tasks.
--   `/Pending_Approval`: Drafts waiting for human review.
 -   `/Approved`: Tasks authorized for execution.
+-   `/In_Progress`: Tasks claimed by the active orchestrator worker.
 -   `/Done`: Completed task archive.
+-   `/Blocked`: Tasks that failed or were blocked by missing runtime prerequisites.
 -   `/Logs`: Audit logs and error reports.
 -   `/Briefings`: Generated reports.
 

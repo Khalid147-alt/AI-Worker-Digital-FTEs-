@@ -10,17 +10,19 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from threading import Thread
 from pathlib import Path
 
-# Config
-VAULT_PATH = Path(os.getenv('VAULT_PATH', 'D:/Hackathon0/AI_Employee_Vault'))
+from config import get_runtime_paths
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+VAULT_PATH, _ = get_runtime_paths()
 LOGS_DIR = VAULT_PATH / 'Logs'
 DASHBOARD_PATH = VAULT_PATH / 'Dashboard.md'
 
 # List of scripts to monitor
 # Note: Orchestrator launches Ralph loop, but is itself a long-running process
 MONITORED_PROCESSES = {
-    'orchestrator': ['python', 'D:/Hackathon0/orchestrator.py'],
-    'fs_watcher': ['python', 'D:/Hackathon0/filesystem_watcher.py'],
-    'linkedin_watcher': ['python', 'D:/Hackathon0/linkedin_watcher.py'] # Optional, consumes browser
+    'orchestrator': [sys.executable, str(REPO_ROOT / 'orchestrator.py')],
+    'fs_watcher': [sys.executable, str(REPO_ROOT / 'filesystem_watcher.py')],
+    'linkedin_watcher': [sys.executable, str(REPO_ROOT / 'linkedin_watcher.py')],
 }
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - WATCHDOG - %(message)s')
@@ -46,8 +48,7 @@ class HealthHandler(BaseHTTPRequestHandler):
 def start_process(name, cmd):
     logger.info(f"Starting {name}...")
     try:
-        # Use Popen to launch
-        proc = subprocess.Popen(cmd, cwd='D:/Hackathon0') # Adjust CWD if needed
+        proc = subprocess.Popen(cmd, cwd=str(REPO_ROOT))
         process_handles[name] = proc
         return proc
     except Exception as e:

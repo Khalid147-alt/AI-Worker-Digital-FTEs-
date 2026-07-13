@@ -1,43 +1,37 @@
-# Setup Guide: Personal AI Employee (Gold Tier)
+# Setup Guide: Personal AI Employee
 
 **Time Required**: ~45 Minutes
 **Prerequisites**: Python 3.10+, Node.js 18+, Docker (for Odoo)
 
 ## 1. Environment Setup
 1.  **Clone Repository**: `git clone <repo>`
-2.  **Install Python Deps**: `pip install -r requirements.txt` (schedule, watchdog, playwright, requests)
-3.  **Install Node Deps**: `npm install` (in mcp_servers directories)
-4.  **Configure `.env`**:
-    ```bash
-    VAULT_PATH=./AI_Employee_Vault
-    ODOO_URL=http://localhost:8069
-    ODOO_DB=mydb
-    ODOO_USER=admin
-    ODOO_PASSWORD=admin
-    ```
+2.  **Install Python Deps**: `pip install -r requirements.txt`
+3.  **Install Node Deps**: `npm install` in the MCP server directories that need them.
+4.  **Configure `.env`** by copying `.env.example` and setting the required runtime variables:
 
-## 2. Infrastructure Launch
-1.  **Start Odoo**:
-    ```bash
-    docker run -d -p 8069:8069 --name odoo --env POSTGRES_PASSWORD=mysecretpassword odoo:16
-    ```
-2.  **Initialize Vault**:
-    Run `python scripts/init_vault.py` (if available) or manually creating folders:
-    `mkdir AI_Employee_Vault/{Needs_Action,Pending_Approval,Approved,Done,Logs,Briefings}`
+    VAULT_PATH=./AI_Employee_Vault
+    SCRIPTS_DIR=./scripts
+    WORKER_ID=orchestrator
+    MAX_RALPH_WORKERS=3
+    CLAUDE_TIMEOUT_SECONDS=300
+
+## 2. Bootstrap and Validation
+1.  **Validate the scheduler regression**:
+    `python -m pytest -q tests/test_orchestrator.py`
+2.  **Initialize the vault directories** if they are missing:
+    `mkdir -p AI_Employee_Vault/{Needs_Action,Approved,In_Progress,Done,Blocked,Logs,Briefings}`
 
 ## 3. Start the System
-1.  **Run Watchdog** (This starts everything else):
-    ```bash
-    python scripts/watchdog.py
-    ```
-2.  **Verify**: Check `AI_Employee_Vault/Logs/system_health.md`. You should see green lights.
+1.  **Run Watchdog** (this starts the orchestrator and related service workers):
+    `python scripts/watchdog.py`
+2.  **Verify**: check the health endpoint at `http://localhost:8765/health`.
 
-## 4. Testing
-1.  **Simple Test**: Create a file in `/Needs_Action` called `hello.md` with content "Say hi".
-2.  **Wait**: 60 seconds.
-3.  **Check**: Look in `/Pending_Approval` or `/Done`.
+## 4. Runtime Expectations
+-   `orchestrator.py` now claims tasks into the in-progress folder before it dispatches the Ralph loop.
+-   Missing Claude CLI or missing Ralph loop assets should raise a startup or task-block failure instead of being silently marked as success.
+-   Audit log activity is written into the vault logs directory for accountability.
 
 ## 5. Troubleshooting
--   **Logs**: Check `/Logs/errors_YYYY-MM-DD.log`.
--   **Health**: Check `http://localhost:8765/health`.
--   **Recovery**: If stuck, delete the `_processing` files in `/Needs_Action`.
+-   **Logs**: inspect `AI_Employee_Vault/Logs`.
+-   **Startup failure**: confirm that `.env` contains `VAULT_PATH` and `SCRIPTS_DIR` and that the referenced paths exist.
+-   **Blocked tasks**: inspect `AI_Employee_Vault/Blocked` for tasks that failed due to prerequisites or runtime errors.

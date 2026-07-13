@@ -1,12 +1,14 @@
-import os
 import sys
-import glob
 from pathlib import Path
 from datetime import datetime, timedelta
-import re
 
-# Configuration
-VAULT_PATH = Path(os.getenv('VAULT_PATH', 'D:/Hackathon0/AI_Employee_Vault'))
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from config import get_runtime_paths
+
+VAULT_PATH, _ = get_runtime_paths()
 DONE_DIR = VAULT_PATH / 'Done'
 NEEDS_ACTION = VAULT_PATH / 'Needs_Action'
 TEMPLATE_PATH = VAULT_PATH / 'Briefings' / 'Briefing_Template.md'

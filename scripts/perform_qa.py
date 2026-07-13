@@ -1,11 +1,10 @@
-import os
-import sys
 import ast
 from pathlib import Path
 
-# Configuration
-VAULT_PATH = Path('D:/Hackathon0/AI_Employee_Vault')
-ROOT_PATH = Path('D:/Hackathon0')
+from config import get_runtime_paths
+
+ROOT_PATH = Path(__file__).resolve().parents[1]
+VAULT_PATH, _ = get_runtime_paths()
 DOCS_PATH = ROOT_PATH / 'docs'
 
 results = []

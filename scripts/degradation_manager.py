@@ -2,15 +2,15 @@ from pathlib import Path
 import os
 import json
 import logging
+import tempfile
 from datetime import datetime
 
-# Configuration
-VAULT_PATH = Path(os.getenv('VAULT_PATH', 'D:/Hackathon0/AI_Employee_Vault'))
+from config import get_runtime_paths
+
+VAULT_PATH, _ = get_runtime_paths()
 DASHBOARD_PATH = VAULT_PATH / 'Dashboard.md'
 INBOX_PATH = VAULT_PATH / 'Inbox'
-TEMP_DIR = Path('/tmp') # or local temp
-if os.name == 'nt':
-    TEMP_DIR = Path(os.getenv('TEMP', 'C:/Temp'))
+TEMP_DIR = Path(tempfile.gettempdir())
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('DegradationManager')

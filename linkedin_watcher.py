@@ -6,13 +6,16 @@ import logging
 import random
 import traceback
 import json
+import sys
+
+REPO_ROOT = Path(__file__).resolve().parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 # Import retry handler (assuming it's in the python path or relative)
 try:
     from scripts.retry_handler import with_retry, TransientError
 except ImportError:
-    # Fallback if running standalone without path setup
-    sys.path.append('D:/Hackathon0') 
     from scripts.retry_handler import with_retry, TransientError
 
 logging.basicConfig(level=logging.INFO)

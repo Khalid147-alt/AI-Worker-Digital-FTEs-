@@ -2,6 +2,8 @@
 credentials.json
 token.json
 processed_ids.json
+linkedin_processed.json
+whatsapp_processed.json
 __pycache__/
 *.pyc
 *.log
@@ -18,7 +20,7 @@ Drop_Folder/
 watcher.log
 watcher_debug.log
 final_log.txt
-*.json
-!README.md
-!docs/**/*.md
-!AI_Employee_Vault/**/*.md
+node_modules/
+mcp_servers/**/node_modules/
+*.db-journal
+*.pma

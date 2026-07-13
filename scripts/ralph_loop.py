@@ -1,19 +1,19 @@
 import sys
-import os
 import argparse
 import subprocess
 import time
-import re
 from datetime import datetime
 from pathlib import Path
-try:
-    from audit_logger import get_audit_logger
-except ImportError:
-    sys.path.append('D:/Hackathon0/scripts')
-    from audit_logger import get_audit_logger
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from config import get_runtime_paths
+from scripts.audit_logger import get_audit_logger
 
 # Configuration
-VAULT_PATH = Path(os.getenv('VAULT_PATH', 'D:/Hackathon0/AI_Employee_Vault'))
+VAULT_PATH, _ = get_runtime_paths()
 LOGS_DIR = VAULT_PATH / 'Logs'
 DONE_DIR = VAULT_PATH / 'Done'
 

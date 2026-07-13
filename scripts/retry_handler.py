@@ -2,11 +2,18 @@ import time
 import functools
 import logging
 import random
+import sys
 from pathlib import Path
 from datetime import datetime
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from config import get_runtime_paths
+
 # Setup Logging
-VAULT_PATH = Path('D:/Hackathon0/AI_Employee_Vault')
+VAULT_PATH, _ = get_runtime_paths()
 LOGS_DIR = VAULT_PATH / 'Logs'
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 

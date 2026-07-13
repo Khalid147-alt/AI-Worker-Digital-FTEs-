@@ -1,12 +1,17 @@
+import hashlib
 import json
 import logging
-import os
-import glob
+import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-# Configuration
-VAULT_PATH = Path(os.getenv('VAULT_PATH', 'D:/Hackathon0/AI_Employee_Vault'))
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from config import get_runtime_paths
+
+VAULT_PATH, _ = get_runtime_paths()
 LOGS_DIR = VAULT_PATH / 'Logs'
 RETENTION_DAYS = 90
 
@@ -22,6 +27,30 @@ class AuditLogger:
         date_str = datetime.now().strftime('%Y-%m-%d')
         return self.logs_dir / f'{date_str}.json'
 
+    def _read_previous_hash(self, log_file: Path):
+        if not log_file.exists():
+            return None
+
+        try:
+            with open(log_file, 'r', encoding='utf-8') as handle:
+                lines = handle.readlines()
+                if not lines:
+                    return None
+                last_line = lines[-1].strip()
+                if not last_line:
+                    return None
+                return json.loads(last_line).get('hash_chain')
+        except Exception:
+            return None
+
+    def _hash_entry(self, entry: dict, previous_hash: str | None) -> str:
+        payload = {
+            'prev_hash': previous_hash,
+            'payload': entry,
+        }
+        serialized = json.dumps(payload, sort_keys=True, separators=(',', ':'))
+        return hashlib.sha256(serialized.encode('utf-8')).hexdigest()
+
     def log_action(self, action_type, target, parameters=None, status="success", result=None):
         """
         Log an accountable action.
@@ -33,6 +62,8 @@ class AuditLogger:
             status (str): 'success', 'pending_approval', 'failure'
             result (str, optional): Outcome details
         """
+        log_file = self._get_log_file()
+        previous_hash = self._read_previous_hash(log_file)
         entry = {
             "timestamp": datetime.now().isoformat(),
             "action_type": action_type,
@@ -40,12 +71,13 @@ class AuditLogger:
             "target": target,
             "parameters": parameters or {},
             "status": status,
-            "result": result
+            "result": result,
         }
+        hash_chain = self._hash_entry(entry, previous_hash)
+        entry['prev_hash'] = previous_hash
+        entry['hash_chain'] = hash_chain
 
-        log_file = self._get_log_file()
         try:
-            # Append JSON object (using JSON Lines format for appendability)
             with open(log_file, 'a', encoding='utf-8') as f:
                 f.write(json.dumps(entry) + '\n')
         except Exception as e:
